@@ -6,8 +6,11 @@ Register Here : [BlockBitsApp](https://t.me/BlockBits_bot/BlockBitsApp?startapp=
 ## Fitur
 
   - Auto Get Account Information
-  - Auto Claim Farming
-  - Auto Auto Clear Task
+  - Auto Complete Onboarding
+  - Auto Claim Daily Check-In
+  - Auto Start & Claim Farming
+  - Auto Upgrade Farming Level [y/n]
+  - Auto Complete Task
   - Multi Account
 
 ## Prasyarat
