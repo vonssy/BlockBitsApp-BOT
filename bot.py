@@ -476,41 +476,50 @@ class BlockBits:
                 current_level = self.user_data(query)['user']['farming_upgrade_level']
                 level_list = self.app_settings(query)['UPGRADE_LEVEL_LIST']
 
-                level = None
-                price = None
-
-                for item in level_list:
-                    if item['rate'] > current_level:
-                        level = item['rate']
-                        price = item['price']
-                        break
-
-                balance = self.user_data(query)['user']['points']
-                if balance >= price:
-                    upgrade = self.upgrade_level(query, price, level)
-                    if upgrade:
-                        self.log(
-                            f"{Fore.MAGENTA+Style.BRIGHT}[ Farming{Style.RESET_ALL}"
-                            f"{Fore.GREEN+Style.BRIGHT} Rate Level Is Upgraded {Style.RESET_ALL}"
-                            f"{Fore.MAGENTA+Style.BRIGHT}] [ Current Rate{Style.RESET_ALL}"
-                            f"{Fore.WHITE+Style.BRIGHT} x{upgrade['farming_upgrade_level']} {Style.RESET_ALL}"
-                            f"{Fore.MAGENTA+Style.BRIGHT}]{Style.RESET_ALL}"
-                        )
-                    else:
-                        self.log(
-                            f"{Fore.MAGENTA+Style.BRIGHT}[ Farming{Style.RESET_ALL}"
-                            f"{Fore.RED+Style.BRIGHT} Rate Level Isn't Upgraded {Style.RESET_ALL}"
-                            f"{Fore.MAGENTA+Style.BRIGHT}]{Style.RESET_ALL}"
-                        )
-                else:
-                    less_balance = price - balance
+                max_level = max(item['rate'] for item in level_list)
+                if current_level >= max_level:
                     self.log(
                         f"{Fore.MAGENTA+Style.BRIGHT}[ Farming{Style.RESET_ALL}"
-                        f"{Fore.YELLOW+Style.BRIGHT} Rate Level Isn't Upgraded {Style.RESET_ALL}"
-                        f"{Fore.MAGENTA+Style.BRIGHT}] [ Reason{Style.RESET_ALL}"
-                        f"{Fore.WHITE+Style.BRIGHT} -{less_balance} Bits {Style.RESET_ALL}"
+                        f"{Fore.GREEN+Style.BRIGHT} Rate Is Reached Max Level {Style.RESET_ALL}"
                         f"{Fore.MAGENTA+Style.BRIGHT}]{Style.RESET_ALL}"
                     )
+                else:
+                    level = None
+                    price = None
+
+                    for item in level_list:
+                        if item['rate'] > current_level:
+                            level = item['rate']
+                            price = item['price']
+                            break
+
+                    balance = self.user_data(query)['user']['points']
+                    if balance >= price:
+                        upgrade = self.upgrade_level(query, price, level)
+                        if upgrade:
+                            self.log(
+                                f"{Fore.MAGENTA+Style.BRIGHT}[ Farming{Style.RESET_ALL}"
+                                f"{Fore.GREEN+Style.BRIGHT} Rate Level Is Upgraded {Style.RESET_ALL}"
+                                f"{Fore.MAGENTA+Style.BRIGHT}] [ Current Rate{Style.RESET_ALL}"
+                                f"{Fore.WHITE+Style.BRIGHT} x{upgrade['farming_upgrade_level']} {Style.RESET_ALL}"
+                                f"{Fore.MAGENTA+Style.BRIGHT}]{Style.RESET_ALL}"
+                            )
+                        else:
+                            self.log(
+                                f"{Fore.MAGENTA+Style.BRIGHT}[ Farming{Style.RESET_ALL}"
+                                f"{Fore.RED+Style.BRIGHT} Rate Level Isn't Upgraded {Style.RESET_ALL}"
+                                f"{Fore.MAGENTA+Style.BRIGHT}]{Style.RESET_ALL}"
+                            )
+                    else:
+                        less_balance = price - balance
+                        self.log(
+                            f"{Fore.MAGENTA+Style.BRIGHT}[ Farming{Style.RESET_ALL}"
+                            f"{Fore.YELLOW+Style.BRIGHT} Rate Level Isn't Upgraded {Style.RESET_ALL}"
+                            f"{Fore.MAGENTA+Style.BRIGHT}] [ Reason{Style.RESET_ALL}"
+                            f"{Fore.WHITE+Style.BRIGHT} -{less_balance} Bits {Style.RESET_ALL}"
+                            f"{Fore.MAGENTA+Style.BRIGHT}]{Style.RESET_ALL}"
+                        )
+
             else:
                 self.log(
                     f"{Fore.MAGENTA+Style.BRIGHT}[ Farming{Style.RESET_ALL}"
